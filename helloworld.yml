@@ -1,8 +1,11 @@
 ---
-- name: Hello World!
-  hosts: all
- 
-  tasks:
- 
-  - name: Hello World!
-    shell: echo "Hi! Tower is working."
+  - hosts: web 
+    gather_facts: false
+
+    tasks:
+      - name: Fetch RHEL version
+        shell: cat /etc/redhat-release 2>&1 | awk '{print$6}'
+        changed_when: false 
+        register: linux_result
+
+      - debug: msg="{{ linux_result.stdout}}"
